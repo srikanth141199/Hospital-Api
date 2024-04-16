@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const doctorSchema = new mongoose.Schema({
   username: {
@@ -7,7 +8,7 @@ const doctorSchema = new mongoose.Schema({
     unique: true,
   },
 
-  password: {
+  passwordHash: {
     type: String,
     validate: {
       validator: function (value) {
@@ -33,6 +34,16 @@ const doctorSchema = new mongoose.Schema({
 },{
     timestamps : true
 });
+
+// create a virtual property to set hashed password
+doctorSchema.virtual('password').set(function (value) {
+	this.passwordHash = bcrypt.hashSync(value, 12);
+});
+
+// function to compare hashed password
+doctorSchema.methods.isPasswordCorrect = function (password) {
+	return bcrypt.compareSync(password, this.passwordHash);
+};
 
 const doctorModel = mongoose.model("Doctor", doctorSchema);
 
