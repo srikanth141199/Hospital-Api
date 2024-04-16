@@ -1,6 +1,8 @@
+import "./env.js"
 import express from "express";
 import passport from "passport";
 //import router from "./routes/routes.js";
+import { connectUsingMongoose } from "./config/mongoose.js";
 
 const app = express();
 const port = process.env.port || 3200;
@@ -19,7 +21,7 @@ app.listen(port, (err)=>{
         console.log("There is a issue in connect to Server!!");
         return;
     }
-    //need to connect to db call to be added.
+    connectUsingMongoose();
     console.log("Server is running on Port : ", port);
 
 })
