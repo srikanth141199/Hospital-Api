@@ -1,0 +1,20 @@
+{
+  "name": "hospital-api",
+  "version": "1.0.0",
+  "description": "API for the doctors of a Hospital which has been allocated by thegovt for testing and quarantine + well being of COVID-19 patients",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Srikanth",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1",
+    "nodemon": "^3.1.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
+  }
+}
