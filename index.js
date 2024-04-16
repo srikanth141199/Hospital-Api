@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+//import router from "./routes/routes.js";
 
 const app = express();
 const port = process.env.port || 3200;
@@ -9,6 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize Passport.js
 app.use(passport.initialize());
+
+//app.use("/", router)
 
 app.listen(port, (err)=>{
 
