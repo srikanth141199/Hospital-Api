@@ -1,6 +1,7 @@
 import "./env.js"
 import express from "express";
 import passport from "passport";
+import passportJWT from "./config/passport-local-startegy.js"
 import bodyParser from "body-parser";
 import router from "./routes/routes.js";
 import doctorRouter from "./routes/doctorRoutes.js";
@@ -12,9 +13,10 @@ const port = process.env.port || 3200;
 // Middleware to parse URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
+app.use(bodyParser.json())
+
 // Initialize Passport.js
 app.use(passport.initialize());
-app.use(bodyParser.json())
 
 // app.get('/', (req, res)=>{
 //     res.send("Welcome to Hospital APIs");

@@ -1,9 +1,8 @@
 import passport from "passport";
 import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import doctorModel from "../model/doctorSchema";
+import doctorModel from "../model/doctorSchema.js";
 
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -14,14 +13,16 @@ const opts = {
 };
 
 
-passport.use(new JWTStrategy(opts, async (payload, done) => {
+passport.use(new JWTStrategy(opts, async (jwtPayload, done) => {
   try {
-    const user = await doctorModel.findById(payload._id);
+    console.log("jwt : ", jwtPayload);
+    const user = await doctorModel.findById(jwtPayload._id);
     if (!user) {
       return done(null, false);
     }
     return done(null, user);
   } catch (error) {
+    console.log("passport error!!");
     return done(error, false);
   }
 }));
