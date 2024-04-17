@@ -15,7 +15,7 @@ const opts = {
 
 passport.use(new JWTStrategy(opts, async (jwtPayload, done) => {
   try {
-    console.log("jwt : ", jwtPayload);
+    //console.log("jwt : ", jwtPayload);
     const user = await doctorModel.findById(jwtPayload._id);
     if (!user) {
       return done(null, false);

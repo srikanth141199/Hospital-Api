@@ -1,6 +1,7 @@
 import doctorModel from "../model/doctorSchema.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import session from "express-session";
 
 export default class DoctorController {
   async registerDoctor(req, res) {

@@ -1,10 +1,13 @@
+import doctorModel from "../model/doctorSchema.js";
 import patientModel from "../model/patientSchema.js";
+import reportModel from "../model/reportSchema.js";
 
 export default class PatientController {
 
     async registerPatient(req, res)  {
         try {
             const patient = await patientModel.findOne({number : req.body.number});
+            console.log("doc Details", req.user);
 
             if(patient){
                 console.log("Patient Already exists!!");
@@ -20,7 +23,31 @@ export default class PatientController {
     }
 
     async createPatientReport(req, res){
+        try {
+            const patientId = req.params.id;
+            const DocId = req.user._id;
 
+            const newReport = await reportModel.create({
+                createdByDoc : DocId,
+                patient : patientId,
+                date : new Date(),
+                reportStatus : req.body.status
+            })
+
+            const doc = await doctorModel.findById(DocId);
+            const patient = await patientModel.findById(patientId)
+
+            doc.reports.push(newReport);
+            patient.reports.push(newReport);
+
+            await doc.save(); // Save the updated doctor document
+            await patient.save(); // Save the updated patient document
+
+            return res.status(201).json({message : "Report created Successfully", data : newReport})
+        } catch (error) {
+            console.log("Error creating Report for Patient!!", error);
+            res.status(500).json({ message: "Error creating Report for Patient!!" });
+        }
     }
 
     async fetchAllReports(req, res){
