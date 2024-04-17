@@ -1,7 +1,9 @@
 import "./env.js"
 import express from "express";
 import passport from "passport";
-//import router from "./routes/routes.js";
+import bodyParser from "body-parser";
+import router from "./routes/routes.js";
+import doctorRouter from "./routes/doctorRoutes.js";
 import { connectUsingMongoose } from "./config/mongoose.js";
 
 const app = express();
@@ -12,8 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize Passport.js
 app.use(passport.initialize());
+app.use(bodyParser.json())
 
-//app.use("/", router)
+// app.get('/', (req, res)=>{
+//     res.send("Welcome to Hospital APIs");
+// });
+
+app.use("/", router)
 
 app.listen(port, (err)=>{
 

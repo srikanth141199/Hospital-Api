@@ -1,57 +1,29 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import doctorModel from '../model/doctorSchema';
+import passport from "passport";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-const local = new LocalStrategy({ usernameField: 'username' }, async (username, password, done) => {
+import doctorModel from "../model/doctorSchema";
+
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET
+};
+
+
+passport.use(new JWTStrategy(opts, async (payload, done) => {
   try {
-    const user = await doctorModel.findOne({ username });
-    if (!user || !user.isPasswordCorrect(password)) {
-      console.log('Invalid Username/Password');
-      return done(null, false);
-    }
-    return done(null, user);
-  } catch (error) {
-    console.log(`Error in finding user: ${error}`);
-    return done(error);
-  }
-});
-
-passport.use('local', local);
-
-//serialize user
-//method is used to determine which data of the user object should be stored in the session.
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-//deserialize user
-//method is used to retrieve the user object from the session data
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await doctorModel.findById(id);
+    const user = await doctorModel.findById(payload._id);
     if (!user) {
       return done(null, false);
     }
     return done(null, user);
   } catch (error) {
-    return done(error);
+    return done(error, false);
   }
-});
+}));
 
-// check if user is authenticated
-passport.checkAuthentication = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.redirect('/');
-};
-
-// set authenticated user for views
-passport.setAuthenticatedUser = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.locals.user = req.user;
-  }
-  next();
-};
-
-export default local;
+export default passport;

@@ -1,8 +1,11 @@
 import express from "express";
+//import { doctorSession, registerDoctor } from "../controllers/doctorController.js";
+const doctorRouter = express.Router();
+import DoctorController from "../controllers/doctorController.js";
 
-const router = express.Router();
+const doctorController  = new DoctorController();
 
-router.post("/register", registerDoctor);
-router.post("/login", doctorSession);
+doctorRouter.post("/register", (req, res, next) => { doctorController.registerDoctor(req, res, next)});
+doctorRouter.post("/login", (req, res, next) => {doctorController.doctorSession(req, res, next)});
 
-export default router;
+export default doctorRouter;
