@@ -51,6 +51,16 @@ export default class PatientController {
     }
 
     async fetchAllReports(req, res){
+        const patientId = req.params.id;
+        //const patient = await patientModel.findById(patientId);
 
+        const patientReports = await reportModel.find({patient : patientId})
+        patientReports.sort((a, b) => {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return dateA - dateB;
+          });
+
+        res.status(200).json(patientReports)
     }
 }
