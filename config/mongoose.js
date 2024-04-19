@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config();// to load environment variables from a .env file into the process.env object
 const url = process.env.DB_URL;
 
 export const connectUsingMongoose = async () => {

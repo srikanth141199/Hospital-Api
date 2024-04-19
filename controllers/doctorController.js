@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import session from "express-session";
 
 export default class DoctorController {
+
+  //method to register Doctor
   async registerDoctor(req, res) {
     //console.log("body : ", req.body);
     //console.log("params : ", req.params);
@@ -30,6 +32,7 @@ export default class DoctorController {
     }
   }
 
+  //Login for doctor and creation of JWT token on Login
   async doctorSession(req, res) {
     try {
       const doc = await doctorModel.findOne({ username: req.body.username });
@@ -43,7 +46,7 @@ export default class DoctorController {
       return res.status(201).json({
         message: "Login successful",
         data: {
-          token: jwt.sign(doc.toJSON(), "B1EC4D3F3C986", { expiresIn: "1h" }),
+          token: jwt.sign(doc.toJSON(), "B1EC4D3F3C986", { expiresIn: "1h" }),//generation of jwt token based on doctor details, secretKey
         },
       });
     } catch (error) {

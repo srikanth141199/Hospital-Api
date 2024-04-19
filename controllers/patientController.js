@@ -4,10 +4,11 @@ import reportModel from "../model/reportSchema.js";
 
 export default class PatientController {
 
+    //to register Patient
     async registerPatient(req, res)  {
         try {
             const patient = await patientModel.findOne({number : req.body.number});
-            console.log("doc Details", req.user);
+            console.log("doc Details", req.user);//Patient will be registered by Doctor
 
             if(patient){
                 console.log("Patient Already exists!!");
@@ -25,8 +26,9 @@ export default class PatientController {
     async createPatientReport(req, res){
         try {
             const patientId = req.params.id;
-            const DocId = req.user._id;
+            const DocId = req.user._id; //fetching Doc details from JWT auth to update in report
 
+            //creation of Report
             const newReport = await reportModel.create({
                 createdByDoc : DocId,
                 patient : patientId,
@@ -34,6 +36,7 @@ export default class PatientController {
                 reportStatus : req.body.status
             })
 
+            //updating report details in Doctor and Patient models
             const doc = await doctorModel.findById(DocId);
             const patient = await patientModel.findById(patientId)
 
@@ -50,11 +53,14 @@ export default class PatientController {
         }
     }
 
+    //fetch all records based on Patient id from url
     async fetchAllReports(req, res){
         const patientId = req.params.id;
         //const patient = await patientModel.findById(patientId);
 
         const patientReports = await reportModel.find({patient : patientId})
+
+        //sorting all the records of the patient based on creation date in ascending order.
         patientReports.sort((a, b) => {
             const dateA = new Date(a.createdAt);
             const dateB = new Date(b.createdAt);

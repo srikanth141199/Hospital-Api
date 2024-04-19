@@ -13,6 +13,7 @@ const port = process.env.port || 3200;
 // Middleware to parse URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
+//Middleware to parse body data
 app.use(bodyParser.json())
 
 // Initialize Passport.js
